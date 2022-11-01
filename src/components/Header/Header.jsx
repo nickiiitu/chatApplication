@@ -1,4 +1,5 @@
 import React from "react";
+import SearchBar from "./SearchBar"
 const Header=()=>{
     return(
         <div className="header">
@@ -9,7 +10,7 @@ const Header=()=>{
            </svg>
          </div>
          <div className="search-bar">
-          <input type="text" placeholder="Search..." />
+         <SearchBar />
          </div>
          <div className="user-settings">
           <div className="dark-light">

@@ -4,6 +4,8 @@ const InitialState={
     openId:null,
     isLoggedIn:null,
     loggerId:null,
+    isDetailsClicked:false,
+    chatList:[]
     };
 export const AuthContext=createContext(InitialState);
 
@@ -15,7 +17,10 @@ export const AuthContext=createContext(InitialState);
             openId:ComponentState.openId,
         isLoggedIn:ComponentState.isLoggedIn,
         loggerId:ComponentState.loggerId,
-        dispatch}
+        dispatch,
+        isDetailsClicked:ComponentState.isDetailsClicked,
+        chatList:ComponentState.chatList
+        }
         }>
             {props.children}
         </AuthContext.Provider>

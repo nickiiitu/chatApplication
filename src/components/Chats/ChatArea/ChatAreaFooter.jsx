@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import io from "socket.io-client";
+//---------setting up connection with backend socket-----------
 
 const ChatAreaFooter=()=>{
+    const socket=io.connect("http://localhost:5000");
+const [msg,setMessage]=useState("");
     const handelkeyPress=(e)=>{
         if(e.key==="Enter" && e.target.value.length>0 ){
-                
+                socket.emit("send_msg",{message:msg});
+                setMessage("");
             // console.log();
+        }else{
+            setMessage(e.target.value);
         }
     }
+    useEffect(()=>{
+        socket.on("recieve_msg",(data)=>{
+            alert(data.message);
+        })
+    },[socket])
     return(
 <div className="chat-area-footer">
            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-video">

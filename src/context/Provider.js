@@ -1,25 +1,45 @@
 const reducerFunc=(state,action)=>{
 if(action.type==="Login"){
-return {
-    openId:null,
-    isLoggedIn:true,
-    loggerId:"ch9",
+    return {
+        openId:null,
+        isLoggedIn:true,
+        loggerId:action.id|| "ch9"  ,
+    }
 }
-}
- if(action.type==="Register"){
+if(action.type==="Register"){
      return {
          openId:null,
          isLoggedIn:true,
-         loggerId:"ch9",
+         loggerId:action.id || "ch9" ,
         }
     }
 if(action.type==="OpenChat"){
     // console.log("open",action.payload);
     return {
+        ...state,
         openId:action.payload.id,
-        isLoggedIn:true,
-        loggerId:"ch9",
     }
+}
+if(action.type==="LogOut"){
+    // console.log("login");
+return {
+    openId:null,
+    isLoggedIn:false,
+    loggerId:null,
+}
+}
+if(action.type==="openChatDetails"){
+return {
+    ...state,
+    isDetailsClicked:!state.isDetailsClicked
+}}
+if(action.type==="updateChatList"){
+    console.log(action.payload.data,"chat");
+    return{
+        ...state,
+        chatList:action.payload.data
+    }
+
 }
 }
 

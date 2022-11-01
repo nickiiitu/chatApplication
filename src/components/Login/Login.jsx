@@ -1,36 +1,56 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth-context";
 import classes from "./Login.module.css";
+import axios from "axios";
 const Login = () => {
-  const [loginData, setLoginData] = useState({ username: "", password: "" });
+  const [loginData, setLoginData] = useState({ userName: null, password: null });
   const ctx=useContext(AuthContext);
+  const navigate=useNavigate();
+useEffect( ()=>{
+  async function fun(){
+if(ctx.isLoggedIn){
+  try {
+  const res=await axios.post("http://localhost:5000/api/user/login",loginData);
+  console.log(res.data,"res");
+  if(res.status===200){
+    ctx.dispatch({type:"Login" ,id:res.data._id});
+    localStorage.setItem("loggerId",res.data._id);
+      navigate("/chats");
+  }else{
+    ctx.dispatch({type:"LogOut"});
+  }
+} catch (error) {
+  console.log(error,"err");
+}}
+}
+fun();
+},[ctx.isLoggedIn])
+
   const handelChange=(e)=>{
-// console.log(e);
-const {name,val}=e.target;
+const {name,value}=e.target;
 setLoginData({
     ...loginData,
-    [name]:val
+    [name]:value
 });
   }
-  const navigate=useNavigate();
   const handelSubmit=(e)=>{
     e.preventDefault();
-    // console.log(ctx);
-ctx.dispatch({type:"Login"});
-navigate("/chats");
+    if(loginData.userName.length>0 && loginData.password.length>0){
+      ctx.dispatch({type:"Login"});
+    }
   }
   return (
     <div>
       <form onSubmit={e=>handelSubmit(e)} className={classes.form}>
-        <label htmlFor="username">USERNAME</label>
+        <label htmlFor="userName">userName</label>
         <input
         onChange={e=>handelChange(e)}
           type="text"
-          id="username"
-        //   value={loginData.username|| ""}
+          id="userName"
+        //   value={loginData.userName|| ""}
           placeholder="Enter Your Full Name"
-          name="username"
+          name="userName"
         ></input>
          <label htmlFor="password">PASSWORD</label>
         <input

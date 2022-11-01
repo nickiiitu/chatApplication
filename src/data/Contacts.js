@@ -34,4 +34,5 @@ const ChatSectionList=[
   },
 ];
 
-export default ChatSectionList;
+// export default ChatSectionList;
+module.exports=ChatSectionList;
