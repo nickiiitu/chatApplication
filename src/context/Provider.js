@@ -34,7 +34,6 @@ return {
     isDetailsClicked:!state.isDetailsClicked
 }}
 if(action.type==="updateChatList"){
-    console.log(action.payload.data,"chat");
     return{
         ...state,
         chatList:action.payload.data

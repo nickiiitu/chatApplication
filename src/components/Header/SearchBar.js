@@ -18,10 +18,9 @@ const SearchBar = () => {
           loggedInUserId: ctx.loggerId,
         });
         const result = await axios.get("http://localhost:5000/api/chat", {
-          params: { id: ctx.loggerId },
+          params: { _id: ctx.loggerId },
           // params: { id: chatId._id },
         });
-        console.log(result.data,"sear");
         ctx.dispatch({
           type: "updateChatList",
           payload: { data: result.data },

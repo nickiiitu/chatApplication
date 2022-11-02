@@ -34,7 +34,6 @@ router.post("/", async (req, res) => {
       path: "lastMsg.sender",
       select: "name pic email",
     });
-    console.log(isChat);
   if (isChat.length > 0) {
     res.send(isChat[0]);
   } else {
@@ -59,7 +58,6 @@ router.post("/", async (req, res) => {
 
 // -----------FetchAllChats---------
 router.get("/", async (req, res) => {
-  console.log(req.query._id);
   const id = req.query._id;
   try {
     var result = await chatsModel.find({ user: { $elemMatch: { $eq: id } } })

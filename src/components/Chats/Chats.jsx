@@ -12,7 +12,6 @@ const Chats=()=>{
  if(localUser && ctx.loggerId===null){
   ctx.dispatch({type:"Login" , id:localUser});
  }
-  console.log(ctx,"ctx");
     return(
         <div>
         <div className="app">
