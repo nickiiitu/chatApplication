@@ -15,5 +15,5 @@ chat:{
 },{
     timestamps:true, 
 });
-
-module.exports("Message",messageSchema);
+const msgModel=mongoose.model("Message",messageSchema)
+module.exports=msgModel;

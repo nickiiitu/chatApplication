@@ -8,22 +8,10 @@ const userModel = require("../DataBase_models/userSchema");
 router.post("/", async (req, res) => {
   const userId = req.body.foundUser._id;
   const loggedInUserId = req.body.loggedInUserId;
-  // const mongoLoggerData = await userModel.findOne({ userId: loggedInUserId });
-  // const loggedInUserId = mongoose.Types.ObjectId(mongoLoggerData._id);
   if (!req.body.foundUser._id) {
     return res.send("UserId is required");
   }
 
-  // var isChat = await chatsModel
-  //   .find({
-  //     $and: [
-  //       { user: { $elemMatch: { $eq: userId } } },
-  //       { user: { $elemMatch: { $eq: loggedInUserId } } },
-  //     ],
-  //     chatType: "Indiviual",
-  //   })
-  //   .populate("user", "-password")
-  //   .populate("lastMsg");
   var isChat = await chatsModel
     .find({
          user:[ userId  ,loggedInUserId ],

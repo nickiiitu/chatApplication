@@ -6,6 +6,7 @@ const {Server}=require("socket.io");
 dotenv.config();
 const userRoutes=require("./routes/userRoutes");
 const chatRoutes=require("./routes/chatRoutes");
+const messageRoutes=require("./routes/messageRoutes");
 const app = express();
 const cors = require("cors");
 const data=require("../src/data/Contacts");
@@ -21,7 +22,7 @@ app.use(express.json())
 connectDB();
 app.use("/api/user",userRoutes)
 app.use("/api/chat",chatRoutes)
-
+app.use("/api/message",messageRoutes)
 //----------Create Server and socket connection--------
 const server=http.createServer(app);
 const io=new Server(server,{
