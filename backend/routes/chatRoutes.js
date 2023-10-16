@@ -1,5 +1,4 @@
 const express = require("express");
-const { default: mongoose } = require("mongoose");
 const router = express.Router();
 const chatsModel = require("../DataBase_models/ChatSchema");
 const userModel = require("../DataBase_models/userSchema");
@@ -14,16 +13,31 @@ router.post("/", async (req, res) => {
 
   var isChat = await chatsModel
     .find({
-         user:[ userId  ,loggedInUserId ],
+         "user.0":userId,
+         "user.1":loggedInUserId
+        //  [ userId  ,loggedInUserId ],
     })
     .populate("user", "-password")
     .populate("lastMsg");
+    console.log(isChat,"chat");
+    if(isChat.length===0){
+      var isChat = await chatsModel
+      .find({
+        "user.0":loggedInUserId,
+        "user.1":userId
+          //  user:[ loggedInUserId,userId ],
+      })      
+    .populate("user", "-password")
+    .populate("lastMsg");
+    console.log(isChat,"cond2");
+    }
     isChat = await userModel.populate(isChat, {
       path: "lastMsg.sender",
       select: "name pic email",
     });
   if (isChat.length > 0) {
     res.send(isChat[0]);
+    console.log("exist");
   } else {
     const chatData = {
       chatName: "sender",
@@ -46,19 +60,27 @@ router.post("/", async (req, res) => {
 
 // -----------FetchAllChats---------
 router.get("/", async (req, res) => {
-  const id = req.query._id;
+  // console.log(req.query.id);
+  const id = req.query.id;
+  // console.log(req);
   try {
     var result = await chatsModel.find({ user: { $elemMatch: { $eq: id } } })
       .populate("user","-password")
       .populate("lastMsg")
       .sort({updateAt:-1})
+      console.log(result,"res");
       result = await userModel.populate(result, {
         path: "lastMsg.sender",
         select: "name pic email",
       });
+      
     res.send(result).status(200);
   } catch (error) {
     res.send(error).status(400);
   }
 });
+router.get("/:chatterId",async (req,res)=>{
+    const details=await chatsModel.findOne({_id:req.params.chatterId}).populate("user","-password");
+    res.status(200).send(details);
+}) 
 module.exports = router;

@@ -28,6 +28,10 @@ const userSchema=mongoose.Schema({
      pic:{
         type:String,
         default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThye7oEv-5iseoJ1f5VaW-aIczCLBiFsHdooySGmQ&s"
+    },
+    isLoggedIn:{
+        type:Boolean,
+        default:false
     }
 },{
     timestamps:true, 

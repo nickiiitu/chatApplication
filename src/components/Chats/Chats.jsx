@@ -12,14 +12,14 @@ const Chats=()=>{
  if(localUser && ctx.loggerId===null){
   ctx.dispatch({type:"Login" , id:localUser});
  }
+ console.log("chats");
     return(
         <div>
         <div className="app">
         <Header />
         <div className="wrapper">
           <ChatsSection />
-
-         <ChatArea />
+         {ctx.openId && <ChatArea />}
         {ctx.isDetailsClicked && <ChatDetails />}
         </div>
        </div>

@@ -1,14 +1,31 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 
 import io from "socket.io-client";
+import { AuthContext } from "../../../context/Auth-context";
 //---------setting up connection with backend socket-----------
 
 const ChatAreaFooter=()=>{
+    const ctx=useContext(AuthContext);
     const socket=io.connect("http://localhost:5000");
 const [msg,setMessage]=useState("");
     const handelkeyPress=(e)=>{
         if(e.key==="Enter" && e.target.value.length>0 ){
-                socket.emit("send_msg",{message:msg});
+            msg.trim();
+            const fun= async ()=>{
+                try {
+                    const sentMsg=await axios.post("http://localhost:5000/api/message/",{
+                        sender:ctx.loggerId,
+                        content:msg,
+                        chatId:ctx.openId
+                    })
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+            fun();
+                // socket.emit("send_msg",{message:msg});
                 setMessage("");
             // console.log();
         }else{

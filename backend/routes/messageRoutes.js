@@ -10,14 +10,13 @@ router.post("/", async (req, res) => {
     return res.status(400).send("Details Not Found");
   }
   try {
-    console.log(userId);
     await msgModel.create({ sender: userId, content, chat: chatId });
-    const newMsg = await msgModel
+    var newMsg = await msgModel
       .findOne({ sender: userId })
       .populate("sender", "_id name pic")
       .populate("chat");
-    newMsg = userModel.populate({ path: "chat.user", select: "_id name pic" });
-    //    console.log(newMsg);
+    // console.log(newMsg);
+    newMsg = await userModel.populate(newMsg,{ path: "chat.user" , select: "_id name pic"});
     res.status(200).send(newMsg);
   } catch (error) {
     res.send(error.message);
@@ -25,12 +24,15 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  
   const chatId = req.query.chatId;
+  // console.log(req.query.chatId);
   try {
-    const chats = await msgModel.find({ chat: {_id:chatId} });
+    var chats = await msgModel.find({ chat: {_id:chatId} }).populate("sender","-password").populate("chat");
+    chats= await userModel.populate(chats,{ path: "chat.user" ,select:"-password"});
     res.status(200).send(chats);
     
-    console.log(chats);
+    // console.log(chats);
   } catch (error) {
     res.status(400).send(error.message);
   }

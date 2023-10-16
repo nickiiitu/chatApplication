@@ -5,6 +5,7 @@ import { AuthContext } from "../../../context/Auth-context";
 const IndividualChat=(props)=>{
 const ctx=useContext(AuthContext);
 const handelClick=()=>{
+    console.log("dispa");
 ctx.dispatch({type:"OpenChat",payload:{id:props.id}});
     }
         return(

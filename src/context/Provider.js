@@ -14,7 +14,7 @@ if(action.type==="Register"){
         }
     }
 if(action.type==="OpenChat"){
-    // console.log("open",action.payload);
+    console.log("open",action.payload);
     return {
         ...state,
         openId:action.payload.id,

@@ -5,31 +5,35 @@ import IndividualChat from "./IndividualChat";
 import { AuthContext } from "../../../context/Auth-context";
 import axios from "axios";
 
-const ChatsSection=()=>{
-const ctx=useContext(AuthContext);
-useEffect(()=>{
-  if(ctx.loggerId){
-    async function fun(){
-      try {
-        const res=await axios.get("http://localhost:5000/api/chat",{params:{id:ctx.loggerId }});
-        // setChatdata(res.data[0].user);
-        ctx.dispatch({type:"updateChatList",payload:{data:res.data}})
-
-      } catch (error) {
-        console.log(error);
+const ChatsSection = () => {
+  const ctx = useContext(AuthContext);
+  useEffect(() => {
+    if (ctx.loggerId) {
+      async function fun() {
+        try {
+          const res = await axios.get("http://localhost:5000/api/chat", {
+            params: { id: ctx.loggerId },
+          });
+          ctx.dispatch({ type: "updateChatList", payload: { data: res.data } });
+        } catch (error) {
+          console.log(error);
+        }
       }
+      fun();
     }
-    fun();
-  }
-},[ctx.loggerId]);
-    return(
-        <div className="conversation-area">
-      {ctx.chatList?.map((data,i)=>{
-        return <IndividualChat 
-         key={i}
-         id={data.user[0].userId}
-           imgSrc={data.user[0].pic}
-           name={data.user[0].name} />
+  }, [ctx.loggerId]);
+  return (
+    <div className="conversation-area">
+      {ctx.chatList?.map((data, i) => {
+        return (
+          <IndividualChat
+            key={i}
+            //  id={data.user[0]._id}
+            id={data._id}
+            imgSrc={data.user[0].pic}
+            name={data.user[0].name}
+          />
+        );
       })}
       {/* {Chatdata?.map((data,i)=>{
         return <IndividualChat 
@@ -38,7 +42,7 @@ useEffect(()=>{
            imgSrc={data.pic}
            name={data.name} />
       })} */}
-        {/* {Chatdata?.map((data,i)=>{
+      {/* {Chatdata?.map((data,i)=>{
           const type="Indiviual";
           if(type===data.chatType){
            return <IndividualChat 
@@ -60,12 +64,11 @@ useEffect(()=>{
             />
           }
         })} */}
-         
-         <button className="add"></button>
-         <div className="overlay"></div>
-        </div>
 
-    );
-}
+      <button className="add"></button>
+      <div className="overlay"></div>
+    </div>
+  );
+};
 
 export default ChatsSection;

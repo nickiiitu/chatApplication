@@ -39,9 +39,12 @@ router.post("/",async (req,res)=>{
 
 //------------LOGIN--------------
 router.post("/login", async (req, res) => {
-    const {userName}=req.body;
+    const {userName,password}=req.body;
     try {
         const userExist=await userModel.findOne({userName});
+        if(password!=userExist.password){
+            return res.status(400).send("wrong password");
+        }
         res.status(200).json(userExist);
     } catch (error) {
         res.sendStatus(400);
@@ -49,9 +52,31 @@ router.post("/login", async (req, res) => {
     }
   });
 
+// ----------------isLoggedIn----------------
+router.update("/update-login", async (req, res) => {
+    const {userName}=req.body;
+    try {
+        const userExist=await userModel.findOne({userName});
+        if(password!=userExist.password){
+            return res.status(400).send("wrong password");
+        }
+        res.status(200).json(userExist);
+    } catch (error) {
+        res.sendStatus(400);
+        console.log(error.message);
+    }
+  });
+//   ----------------Logout--------------
+
 //   -------------SearchUser--------------- for setting fetchoption in searchbar autocomplete
   router.get("/search",async(req,res)=>{
     const allUsers=await userModel.find({name:{$regex:req.query.name,$options:"i"}}).find({_id:{$ne:req.query.id}});
     res.json(allUsers).status(200);
   });
+
+// ----------Details of single User------------
+// router.get("/:chatterId",async (req,res)=>{
+//     const details=await userModel.findOne({_id:req.params.chatterId});
+//     res.status(200).send(details);
+// }) 
 module.exports=router;
